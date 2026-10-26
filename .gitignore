@@ -1,9 +1,21 @@
-# Ignore build outputs from performing a nix-build or `nix build` command
+# Ignore build artifacts
 result
 result-*
+.direnv/
 
-# Ignore automatically generated direnv output
-.direnv
+# Ignore private keys
+*.age
+keys.txt
+id_ed25519*
 
-# Ignore NixOS interactive test driver history
-**/.nixos-test-history
+# Ignore editor swap files
+.*.swp
+*~
+\#*\#
+
+# Enforce allowlisting for secrets/
+secrets/*
+!secrets/*.enc.yaml
+!secrets/*.enc.json
+!secrets/*.enc.env
+!secrets/.gitkeep
