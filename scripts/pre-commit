@@ -1,0 +1,21 @@
+#!/bin/sh
+# pre-commit hook to prevent unencrypted secrets from being committed
+
+# Find staged files in the secrets directory
+STAGED_SECRETS=$(git diff --cached --name-only --diff-filter=ACM | grep '^secrets/.*\.enc\.\(yaml\|json\|env\|ini\)$')
+
+if [ -z "$STAGED_SECRETS" ]; then
+    exit 0
+fi
+
+# Check each staged secret file for the SOPS MAC (an indicator it was encrypted by SOPS)
+for FILE in $STAGED_SECRETS; do
+    if ! grep -q 'sops:' "$FILE"; then
+        echo "ERROR: Unencrypted secret detected in $FILE!"
+        echo "The file does not contain the 'sops:' encryption metadata block."
+        echo "Please encrypt the file using sops before committing."
+        exit 1
+    fi
+done
+
+exit 0

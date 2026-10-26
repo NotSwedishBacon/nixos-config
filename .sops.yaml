@@ -1,0 +1,9 @@
+keys:
+  # Example key, replace with your actual keys
+  - &admin_key age1...
+
+creation_rules:
+  - path_regex: ^secrets/.*\.enc\.(yaml|json|env|ini)$
+    key_groups:
+      - age:
+          - *admin_key
